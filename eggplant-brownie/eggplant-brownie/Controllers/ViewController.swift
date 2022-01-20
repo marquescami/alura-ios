@@ -13,7 +13,7 @@ protocol AdicionaRefeicaoDelegate {
 
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate{
     
-    // MARK - Atributos
+    // MARK: - Atributos
     
     var delegate: AdicionaRefeicaoDelegate?
     var itens: [Item] = [Item(nome: "Molho de tomate", calorias: 40.0),
@@ -22,14 +22,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                         Item(nome: "Manjericão", calorias: 40.0)]
     var itensSelecionados: [Item] = []
     
-    // MARK - IBOutlets
+    // MARK: - IBOutlets
     @IBOutlet var nomeTextField: UITextField?
     @IBOutlet weak var felicidadeTextField: UITextField?
     
-    //remove todos os itens
-    //delegate?.refeicoes.removeAll()
+
     
-    // MARK - UITableViewDataSource
+    
+    // MARK: - UITableViewDataSource
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) ->
     Int {
@@ -48,7 +48,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         return celula
     }
     
-    // MARK - UITableViewDelegate
+    // MARK: - UITableViewDelegate
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
         
@@ -70,7 +70,17 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
     }
     
-    // MARK - IBActions
+    // MARK: - View life cycle
+    override func viewDidLoad() {
+        let botaoAdicionarItem = UIBarButtonItem(title: "adicionar", style: .plain, target: self, action: #selector(adicionarItens))
+        navigationItem.rightBarButtonItem = botaoAdicionarItem
+    }
+ 
+    @objc func adicionarItens(){
+        print("adicionar novo item na lista")
+    }
+    
+    // MARK: - IBActions
     @IBAction func adicionar(_ sender: Any) {
         
         guard let nomeDaRefeicao = nomeTextField?.text else {
