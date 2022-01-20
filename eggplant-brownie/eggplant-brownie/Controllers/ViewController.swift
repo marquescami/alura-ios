@@ -11,7 +11,11 @@ protocol AdicionaRefeicaoDelegate {
     func add(_ refeicao: Refeicao)
 }
 
-class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate{
+class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, AdicionaItensDelegate {
+    
+    // MARK: - IBOutlet
+    
+    @IBOutlet weak var ItensTableView: UITableView!
     
     // MARK: - Atributos
     
@@ -50,6 +54,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     // MARK: - UITableViewDelegate
     
+    //captura de evento de celula (check)
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
         
         //extrai optional
@@ -77,8 +82,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
  
     @objc func adicionarItens(){
-       let adicionarItensViewController = AdicionarItensViewController()
+        let adicionarItensViewController = AdicionarItensViewController(delegate: self)
         navigationController?.pushViewController(adicionarItensViewController, animated: true)
+    }
+    
+    func add(_ item: Item) {
+        itens.append(item)
+        ItensTableView.reloadData()
     }
     
     // MARK: - IBActions
