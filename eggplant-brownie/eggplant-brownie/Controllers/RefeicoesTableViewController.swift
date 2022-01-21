@@ -25,6 +25,10 @@ class RefeicoesTableViewController: UITableViewController, AdicionaRefeicaoDeleg
         let refeicao = refeicoes[indexPath.row]
         celula.textLabel?.text = refeicao.nome
         
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(mostrarDealhes(_:)))
+        
+        celula.addGestureRecognizer(longPress)
+        
         return celula
     }
     
@@ -33,6 +37,20 @@ class RefeicoesTableViewController: UITableViewController, AdicionaRefeicaoDeleg
         
         //atualiza o elemento da lista
         tableView.reloadData()
+    }
+    
+    @objc func mostrarDealhes(_ gesture: UILongPressGestureRecognizer){
+        //
+        if gesture.state == .began {
+            let celula = gesture.view as! UITableViewCell
+            
+            //recuperando objeto pressionado
+            guard let indexPath = tableView.indexPath(for: celula) else { return }
+            let refeicao = refeicoes[indexPath.row]
+            
+            print("refeicao: \(refeicao.nome)")
+            
+        }
     }
     
     //metodo usado normalmente para passar informações entre controllers, conversão
