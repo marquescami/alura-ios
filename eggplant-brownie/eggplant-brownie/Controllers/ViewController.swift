@@ -88,7 +88,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func add(_ item: Item) {
         itens.append(item)
-        ItensTableView.reloadData()
+        if let tableView = ItensTableView {
+            tableView.reloadData()
+        } else {
+            Alerta(controller: self).exibe()
+        }
     }
     
     // MARK: - IBActions

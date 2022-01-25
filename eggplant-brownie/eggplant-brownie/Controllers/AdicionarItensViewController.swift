@@ -49,7 +49,10 @@ class AdicionarItensViewController: UIViewController {
         //checando se o numero de calorias pdoe ser convertido para double
         if let numeroDeCalorias = Double (calorias) {
             let item = Item(nome: nome, calorias: numeroDeCalorias)
+            
+            // como se tivesse um if, so ira para o metodo se existir o delegate - optional chaining, importante tratar o else caso necessario pensando em tratar erros
             delegate?.add(item)
+            
             navigationController?.popViewController(animated: true)
         }
     }
