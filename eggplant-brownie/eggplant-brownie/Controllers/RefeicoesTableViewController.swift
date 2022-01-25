@@ -49,19 +49,25 @@ class RefeicoesTableViewController: UITableViewController, AdicionaRefeicaoDeleg
             let refeicao = refeicoes[indexPath.row]
 
             //controlador de alerta
-            
-
-            
             let alerta = UIAlertController(title: refeicao.nome, message: refeicao.detalhes(), preferredStyle: .alert)
 
             present(alerta, animated: true, completion: nil)
             
-            //criando botao
-            let botaoCancelar = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
-            
+            //criando botões
+            let botaoCancelar = UIAlertAction(title: "Cancelar", style: .cancel)
             alerta.addAction(botaoCancelar)
             
+            let botaoRemover = UIAlertAction(title: "Remover", style: .destructive, handler: { alerta in //closure
+                self.refeicoes.remove(at: indexPath.row)
+                self.tableView.reloadData()
+            })
+            alerta.addAction(botaoRemover)
         }
+    }
+    
+    
+    func removeRefeicao(alerta: UIAlertAction){
+
     }
     
     //metodo usado normalmente para passar informações entre controllers, conversão
