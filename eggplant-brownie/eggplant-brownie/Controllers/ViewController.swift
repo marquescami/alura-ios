@@ -91,27 +91,34 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         if let tableView = ItensTableView {
             tableView.reloadData()
         } else {
-            Alerta(controller: self).exibe()
+            Alerta(controller: self).exibe(mensagem: "Erro ao atualizar a tabela")
         }
     }
     
-    // MARK: - IBActions
-    @IBAction func adicionar(_ sender: Any) {
-        
+    func recuperarRefeicaoDoFormulario() -> Refeicao? {
         guard let nomeDaRefeicao = nomeTextField?.text else {
-            return
+            return nil
         }
         
         guard let felicidadeDaRefeicao = felicidadeTextField?.text, let felicidade = Int(felicidadeDaRefeicao) else {
-            return
+            return nil
         }
+        
         
         let refeicao = Refeicao(nome: nomeDaRefeicao, felicidade: felicidade)
         
         refeicao.itens = itensSelecionados
         
-        print("comi \(refeicao.nome) e fiquei com felicidade: \(refeicao.felicidade)")
+        return refeicao
         
+    }
+    
+    
+    // MARK: - IBActions
+    @IBAction func adicionar(_ sender: Any) {
+       
+        guard let refeicao = recuperarRefeicaoDoFormulario()else{
+            return Alerta(controller: self).exibe(mensagem: "Erro ao ler dados do formulário")}
         delegate?.add(refeicao)
         
         //usando quando desejar voltar para tela anterior no navigation controller
