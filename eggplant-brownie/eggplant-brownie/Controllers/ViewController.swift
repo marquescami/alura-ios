@@ -21,16 +21,16 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     var delegate: AdicionaRefeicaoDelegate?
     var itens: [Item] = [Item(nome: "Molho de tomate", calorias: 40.0),
-                        Item(nome: "Queijo", calorias: 40.0),
-                        Item(nome: "Molho apimentado", calorias: 40.0),
-                        Item(nome: "Manjericão", calorias: 40.0)]
+                         Item(nome: "Queijo", calorias: 40.0),
+                         Item(nome: "Molho apimentado", calorias: 40.0),
+                         Item(nome: "Manjericão", calorias: 40.0)]
     var itensSelecionados: [Item] = []
     
     // MARK: - IBOutlets
     @IBOutlet var nomeTextField: UITextField?
     @IBOutlet weak var felicidadeTextField: UITextField?
     
-
+    
     
     
     // MARK: - UITableViewDataSource
@@ -39,11 +39,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     Int {
         return itens.count
     }
-        
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) ->
     UITableViewCell {
         let celula = UITableViewCell(style: .default, reuseIdentifier: nil)
-               
+        
         let linhaDaTabela = indexPath.row
         let item = itens[linhaDaTabela]
         
@@ -79,8 +79,21 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     override func viewDidLoad() {
         let botaoAdicionarItem = UIBarButtonItem(title: "adicionar", style: .plain, target: self, action: #selector(adicionarItens))
         navigationItem.rightBarButtonItem = botaoAdicionarItem
+        
+        //recuperando dados do arquivo
+        
+        do {
+            guard let diretorio = recuperaDiretorio() else { return}
+            let dados = try Data(contentsOf: diretorio)
+            let itensSalvos = try
+            NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(dados) as! [Item]
+            
+            itens = itensSalvos
+        } catch {
+            print(error.localizedDescription)
+        }
     }
- 
+    
     @objc func adicionarItens(){
         let adicionarItensViewController = AdicionarItensViewController(delegate: self)
         navigationController?.pushViewController(adicionarItensViewController, animated: true)
@@ -93,6 +106,23 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         } else {
             Alerta(controller: self).exibe(mensagem: "Erro ao atualizar a tabela")
         }
+        
+        do{
+            let dados = try NSKeyedArchiver.archivedData(withRootObject: itens, requiringSecureCoding: false)
+            guard let caminho = recuperaDiretorio() else {return}
+            try dados.write(to: caminho)
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
+    func recuperaDiretorio() -> URL? {
+        
+        guard let diretorio = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {return nil}
+        
+        let caminho = diretorio.appendingPathComponent("itens")
+        
+        return caminho
     }
     
     func recuperarRefeicaoDoFormulario() -> Refeicao? {
@@ -104,9 +134,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             return nil
         }
         
-        
         let refeicao = Refeicao(nome: nomeDaRefeicao, felicidade: felicidade)
-        
         refeicao.itens = itensSelecionados
         
         return refeicao
@@ -116,7 +144,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     // MARK: - IBActions
     @IBAction func adicionar(_ sender: Any) {
-       
+        
         guard let refeicao = recuperarRefeicaoDoFormulario()else{
             return Alerta(controller: self).exibe(mensagem: "Erro ao ler dados do formulário")}
         delegate?.add(refeicao)

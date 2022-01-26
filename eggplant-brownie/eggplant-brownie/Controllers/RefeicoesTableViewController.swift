@@ -12,6 +12,26 @@ class RefeicoesTableViewController: UITableViewController, AdicionaRefeicaoDeleg
     var refeicoes = [Refeicao(nome: "Macarrão", felicidade: 4),
                      Refeicao(nome: "Lasanha", felicidade: 5),
                      Refeicao(nome: "Pizza", felicidade: 3)]
+    override func viewDidLoad() {
+        
+        guard let caminho = recuperaCaminho() else {return}
+        do{
+            let dados = try Data(contentsOf: caminho)
+            guard let refeicoesSalvas = try
+                    NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(dados) as? Array<Refeicao> else {return}
+            refeicoes = refeicoesSalvas
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
+    func recuperaCaminho() -> URL? {
+        guard let diretorio = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {return nil}
+        
+        let caminho = diretorio.appendingPathComponent("refeicao")
+        
+        return caminho
+    }
     
     // MARK: - UITableViewDataSource
     
@@ -25,7 +45,7 @@ class RefeicoesTableViewController: UITableViewController, AdicionaRefeicaoDeleg
         let refeicao = refeicoes[indexPath.row]
         celula.textLabel?.text = refeicao.nome
         
-        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(mostrarDealhes(_:)))
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(mostrarDetalhes(_:)))
         
         celula.addGestureRecognizer(longPress)
         
@@ -37,9 +57,20 @@ class RefeicoesTableViewController: UITableViewController, AdicionaRefeicaoDeleg
         
         //atualiza o elemento da lista
         tableView.reloadData()
+        
+        guard let caminho = recuperaCaminho() else {return}
+        
+        do {
+            let dados = try NSKeyedArchiver.archivedData(withRootObject: refeicoes, requiringSecureCoding: false)
+            try dados.write(to: caminho)
+        }
+        catch {
+            print(error.localizedDescription)
+                                                        
+        }
     }
     
-    @objc func mostrarDealhes(_ gesture: UILongPressGestureRecognizer){
+    @objc func mostrarDetalhes(_ gesture: UILongPressGestureRecognizer){
         
         if gesture.state == .began {
             let celula = gesture.view as! UITableViewCell
@@ -47,21 +78,11 @@ class RefeicoesTableViewController: UITableViewController, AdicionaRefeicaoDeleg
             //recuperando objeto pressionado
             guard let indexPath = tableView.indexPath(for: celula) else { return }
             let refeicao = refeicoes[indexPath.row]
-
-            //controlador de alerta
-            let alerta = UIAlertController(title: refeicao.nome, message: refeicao.detalhes(), preferredStyle: .alert)
-
-            present(alerta, animated: true, completion: nil)
             
-            //criando botões
-            let botaoCancelar = UIAlertAction(title: "Cancelar", style: .cancel)
-            alerta.addAction(botaoCancelar)
-            
-            let botaoRemover = UIAlertAction(title: "Remover", style: .destructive, handler: { alerta in //closure
+            RemoveRefeicaoViewController(controller: self).exibe(refeicao, handler: { alert in
                 self.refeicoes.remove(at: indexPath.row)
                 self.tableView.reloadData()
             })
-            alerta.addAction(botaoRemover)
         }
     }
     
