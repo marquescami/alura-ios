@@ -11,25 +11,30 @@
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
                 <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="AluraViagens" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="aHw-Qh-1vi">
-                                <rect key="frame" x="0.0" y="-40" width="428" height="936"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="aHw-Qh-1vi">
+                                <rect key="frame" x="0.0" y="44" width="414" height="852"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="aHw-Qh-1vi" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="9ar-a1-BcK"/>
+                            <constraint firstItem="aHw-Qh-1vi" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="IjY-UF-lSA"/>
+                            <constraint firstItem="aHw-Qh-1vi" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="TtQ-sZ-cah"/>
+                            <constraint firstAttribute="bottom" secondItem="aHw-Qh-1vi" secondAttribute="bottom" id="aCU-gs-UNN"/>
+                        </constraints>
                     </view>
                     <connections>
                         <outlet property="viagensTableView" destination="aHw-Qh-1vi" id="QXI-yr-Qlh"/>
                     </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="124.6376811594203" y="79.6875"/>
         </scene>
