@@ -21,8 +21,9 @@ class HomeTableViewHeader: UIView {
         bannerView.layer.cornerRadius = 10
         bannerView.layer.masksToBounds = true
         
-        //arredondando a view azul
-        headerView.layer.cornerRadius = 500
+        //arredondando a view azul e definicao conforme aparelho iphone / ipad
+        headerView.layer.cornerRadius =
+        UIDevice.current.userInterfaceIdiom == UIUserInterfaceIdiom.phone ? 500 : 200
         headerView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
     }
 }
